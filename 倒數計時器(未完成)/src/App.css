@@ -1,0 +1,16 @@
+.modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 20px;
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white;
+    border-radius: 8px;
+    text-align: center;
+    display: none; /* 預設隱藏 */
+  }
+  
+  .modal.show {
+    display: block; /* 顯示彈窗 */
+  }
