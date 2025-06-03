@@ -9,7 +9,7 @@ function App(){
   const sendMessages=()=>{
     if (inputText.trim()==="")
       return;
-    else console(`${inputText}`)
+    else console.log(`${inputText}`)
 
   }
   return(<>
