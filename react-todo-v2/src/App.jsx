@@ -1,10 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 function App() {
-  const [tasks, setTasks] = useState([
-    { id: 1, text: "練習React", done: false },
-    { id: 2, text: "吃午餐", done: false },
-  ]);
+
+  const [tasks, setTasks] = useState([]);
 
   const [inputValue, setInputValue] = useState("");
 
@@ -40,7 +38,25 @@ function App() {
     setEditId(null);
     setEditText("");
   };
+  useEffect(() => {
+    const saved = localStorage.getItem("myTask");
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        setTasks(parsed);
+      } catch (err) {
+        console.error("無法解析 localStorage 資料", err);
+      }
+    }
+  }, []);
 
+  // ✅ 之後 tasks 更新才寫入 localStorage
+  useEffect(() => {
+    // 避免第一次 render 就寫入空資料
+    if (tasks.length > 0) {
+      localStorage.setItem("myTask", JSON.stringify(tasks));
+    }
+  }, [tasks]);
   return (
     <div style={{ padding: "2rem" }}>
       <h1>我的待辦事項</h1>
