@@ -8,21 +8,39 @@ function App() {
 
   const [inputValue, setInputValue] = useState("");
 
-  const handleAddTask=()=>{
-  if (inputValue.trim() === "") return;
+  const handleAddTask = () => {
+    if (inputValue.trim() === "") return;
 
-  const newTask = {
-    id: Date.now(),
-    text: inputValue,
-    done: false,
+    const newTask = {
+      id: Date.now(),
+      text: inputValue,
+      done: false,
+    };
+    setTasks([...tasks, newTask]);
+    setInputValue("");
   };
-  setTasks([...tasks,newTask]);
-  setInputValue('');}
 
-  const handleDelete=(id)=>{
-    const updatedTasks=tasks.filter(task=>task.id!==id);
-    setTasks(updatedTasks)
-  }
+  const handleDelete = (id) => {
+    const updatedTasks = tasks.filter((task) => task.id !== id);
+    setTasks(updatedTasks);
+  };
+
+  const [editId, setEditId] = useState(null);
+  const [editText, setEditText] = useState("");
+
+  const handleEdit = (task) => {
+    setEditId(task.id);
+    setEditText(task.text);
+  };
+  const handleSave = (id) => {
+    const updatedTasks = tasks.map((task) =>
+      task.id === id ? { ...task, text: editText } : task
+    );
+    setTasks(updatedTasks);
+    setEditId(null);
+    setEditText("");
+  };
+
   return (
     <div style={{ padding: "2rem" }}>
       <h1>我的待辦事項</h1>
@@ -37,8 +55,21 @@ function App() {
       <ul>
         {tasks.map((task) => (
           <li key={task.id}>
-            {task.done ? "✅" : "⬜"} {task.text}
-            <button onClick={()=>handleDelete(task.id)}>刪除</button>
+            {editId === task.id ? (
+              <>
+                <input
+                  value={editText}
+                  onChange={(e) => setEditText(e.target.value)}
+                />
+                <button onClick={() => handleSave(task.id)}>儲存</button>
+              </>
+            ) : (
+              <>
+                {task.done ? "✅" : "⬜"} {task.text}
+                <button onClick={() => handleEdit(task)}>編輯</button>
+              </>
+            )}
+            <button onClick={() => handleDelete(task.id)}>刪除</button>
           </li>
         ))}
       </ul>
