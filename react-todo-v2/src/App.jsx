@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 function App() {
-  const [task, setTask] = useState([
+  const [tasks, setTasks] = useState([
     { id: 1, text: "練習React", done: false },
     { id: 2, text: "吃午餐", done: false },
   ]);
@@ -16,8 +16,13 @@ function App() {
     text: inputValue,
     done: false,
   };
-  setTask([...task,newTask]);
+  setTasks([...tasks,newTask]);
   setInputValue('');}
+
+  const handleDelete=(id)=>{
+    const updatedTasks=tasks.filter(task=>task.id!==id);
+    setTasks(updatedTasks)
+  }
   return (
     <div style={{ padding: "2rem" }}>
       <h1>我的待辦事項</h1>
@@ -30,9 +35,10 @@ function App() {
       <button onClick={handleAddTask}>新增</button>
 
       <ul>
-        {task.map((task) => (
+        {tasks.map((task) => (
           <li key={task.id}>
             {task.done ? "✅" : "⬜"} {task.text}
+            <button onClick={()=>handleDelete(task.id)}>刪除</button>
           </li>
         ))}
       </ul>
