@@ -56,20 +56,18 @@ function App() {
     setTasks(updatedTasks);
   };
 
-  const [filter,setFilter]=useState("all")
+  const [filter, setFilter] = useState("all");
 
-  const filteredTasks=tasks.filter(task=>{
-    if(filter==="done")return task.done;
-    if(filter==="active")return !task.done;
+  const filteredTasks = tasks.filter((task) => {
+    if (filter === "done") return task.done;
+    if (filter === "active") return !task.done;
     return true;
-  })
+  });
 
   // ✅ 之後 tasks 更新才寫入 localStorage
   useEffect(() => {
     // 避免第一次 render 就寫入空資料
-    if (tasks.length > 0) {
-      localStorage.setItem("myTask", JSON.stringify(tasks));
-    }
+    localStorage.setItem("myTask", JSON.stringify(tasks));
   }, [tasks]);
   return (
     <div style={{ padding: "2rem" }}>
@@ -81,11 +79,11 @@ function App() {
         onChange={(e) => setInputValue(e.target.value)}
       />
       <button onClick={handleAddTask}>新增</button>
-<div style={{margin:'1rem 0'}}>
-  <button onClick={()=>setFilter("all")}>全部</button>
-  <button onClick={()=>setFilter("active")}>未完成</button>
-  <button onClick={()=>setFilter("done")}>已完成</button>
-</div>
+      <div style={{ margin: "1rem 0" }}>
+        <button onClick={() => setFilter("all")}>全部</button>
+        <button onClick={() => setFilter("active")}>未完成</button>
+        <button onClick={() => setFilter("done")}>已完成</button>
+      </div>
       <ul>
         {filteredTasks.map((task) => (
           <li
@@ -101,7 +99,8 @@ function App() {
               style={{ cursor: "pointer" }}
               onClick={() => handleToggleDone(task.id)}
             >
-              {task.done ? "✅" : "⬜"}{task.text}
+              {task.done ? "✅" : "⬜"}
+              {task.text}
             </span>
             {editId === task.id ? (
               <>
