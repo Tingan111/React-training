@@ -11,6 +11,7 @@ function App() {
     const newTask = {
       id: Date.now(),
       text: inputValue,
+      date: new Date().toLocaleString("zh-TW"),
       done: false,
     };
     setTasks([...tasks, newTask]);
@@ -30,24 +31,25 @@ function App() {
     setEditText(task.text);
   };
   const handleSave = (id) => {
-    const updatedTasks = tasks.map((task) =>
-      task.id === id ? { ...task, text: editText } : task
-    );
-    setTasks(updatedTasks);
+    const updatedTasks = tasks.map((task) => {
+      if (task.id === id) {
+        return {
+          ...task,
+          text: editText, // 保留其他欄位只改 text
+        };
+      }
+      return task;
+    });
+  
+    // 確保 tasks 是一個合法陣列才更新
+    if (Array.isArray(updatedTasks) && updatedTasks.length >= 0) {
+      setTasks(updatedTasks);
+    }
+  
     setEditId(null);
     setEditText("");
   };
-  useEffect(() => {
-    const saved = localStorage.getItem("myTask");
-    if (saved) {
-      try {
-        const parsed = JSON.parse(saved);
-        setTasks(parsed);
-      } catch (err) {
-        console.error("無法解析 localStorage 資料", err);
-      }
-    }
-  }, []);
+  
 
   const handleToggleDone = (id) => {
     const updatedTasks = tasks.map((task) =>
@@ -64,11 +66,22 @@ function App() {
     return true;
   });
 
-  // ✅ 之後 tasks 更新才寫入 localStorage
-  useEffect(() => {
-    // 避免第一次 render 就寫入空資料
-    localStorage.setItem("myTask", JSON.stringify(tasks));
-  }, [tasks]);
+  useEffect(()=>{
+    localStorage.setItem("myTask",JSON.stringify(tasks));
+  },[tasks])
+  useEffect(()=>{
+    const saved=localStorage.getItem("myTask");
+    if(saved){
+      try{
+        const parsed=JSON.parse(saved);
+        if(Array.isArray(parsed)){
+          setTasks(parsed)
+        }
+      }catch(err){
+        console.log("無法解析 localStorage 資料", err);
+      }
+    }
+  },[])
   return (
     <div style={{ padding: "2rem" }}>
       <h1>我的待辦事項</h1>
@@ -100,7 +113,8 @@ function App() {
               onClick={() => handleToggleDone(task.id)}
             >
               {task.done ? "✅" : "⬜"}
-              {task.text}
+              {task.text}。
+              新增時間：{task.date}
             </span>
             {editId === task.id ? (
               <>
