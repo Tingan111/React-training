@@ -3,20 +3,17 @@ import { useState } from "react";
 function Counter() {
   const [count, setCount] = useState(0);
 
-
   const increment = () => {
     setCount(count + 1);
   };
 
   const decrement = () => {
-    if(count!==0)
-    setCount(count - 1);
+    if (count !== 0) setCount(count - 1);
   };
-
   const reset = () => {
     setCount(0);
   };
-const show=count===0?"零":count%2===0?"偶數":"奇數"
+  const show = count === 0 ? "零" : count % 2 === 0 ? "偶數" : "奇數";
   return (
     <div className="min-h-screen bg-gray-100 flex items-center justify-center">
       <div className="bg-white p-8 rounded-lg shadow-md text-center">
