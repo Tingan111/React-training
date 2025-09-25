@@ -4,7 +4,6 @@ function App() {
   // ❓使用 lazy initial state，產生 1~100 的亂數
   const [number, setNumber] =useState(0)
   const regenerate = () => {
-    console.log('ˇ點擊過了ㄌ');
   
     setNumber(Math.floor(Math.random() * 100) + 1);
   };
